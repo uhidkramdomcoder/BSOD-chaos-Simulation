@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Infinite BSOD Simulation</title>
+  <title>System Chaos Simulator</title>
   <style>
     html, body {
       margin: 0;
@@ -40,7 +40,7 @@
     }
 
     body.glitching {
-      animation: flash 0.1s infinite alternate;
+      animation: flash 1s infinite alternate;
     }
 
     @keyframes flash {
@@ -120,6 +120,12 @@
       transition: width 0.5s linear;
     }
 
+    .bsod img {
+      margin-top: 20px;
+      width: 300px;
+      height: 300px;
+    }
+
     #finalMessage {
       display: none;
       position: fixed;
@@ -155,7 +161,7 @@
     We're just collecting some error info, and then we'll restart for you.<br><br>
     <span id="bsodPercent">0%</span> complete</p>
   <div class="progress"><div class="bar" id="bsodBar"></div></div>
-  <img src="https://api.qrserver.com/v1/create-qr-code/?data=https://youtu.be/dQw4w9WgXcQ&size=300x300">
+  <img src="https://api.qrserver.com/v1/create-qr-code/?data=https://www.youtube.com/watch?v=dQw4w9WgXcQ&size=300x300">
 </div>
 
 <div id="bsod2" class="bsod black-screen">
@@ -164,13 +170,13 @@
     We're just collecting some error info, and then we'll restart for you.<br><br>
     <span id="installPercent">0%</span> complete</p>
   <div class="progress"><div class="bar" id="installBar"></div></div>
-  <img src="https://api.qrserver.com/v1/create-qr-code/?data=https://youtu.be/dQw4w9WgXcQ&size=300x300">
+  <img src="https://api.qrserver.com/v1/create-qr-code/?data=https://www.youtube.com/watch?v=dQw4w9WgXcQ&size=300x300">
 </div>
 
 <div id="finalMessage">YOUR COMPUTER HAS BEEN FUCKED. :)</div>
 
 <script>
-let errorInterval, buzzOscillator, audioCtx;
+let errorInterval, audioCtx, buzzOscillator;
 
 function spawnError() {
   const err = document.createElement('div');
@@ -187,7 +193,7 @@ function startChaos() {
   document.getElementById('staticSound').play();
   errorInterval = setInterval(spawnError, 700);
 
-  setTimeout(startBSOD, 5 * 60 * 1000); // 5 minutes
+  setTimeout(startBSOD, 5 * 60 * 1000); // 5 mins
 }
 
 function startBSOD() {
@@ -199,8 +205,8 @@ function startBSOD() {
   let percent = 0;
   const span = document.getElementById('bsodPercent');
   const bar = document.getElementById('bsodBar');
-  const duration = 30 * 60 * 1000; // 30 minutes
-  const step = 1000;
+  const duration = 30 * 60 * 1000;
+  const step = 500;
   const steps = duration / step;
   const increment = 100 / steps;
 
@@ -211,7 +217,7 @@ function startBSOD() {
       startInstallPhase();
     }
     span.textContent = Math.floor(percent) + '%';
-    bar.style.width = Math.min(percent, 100) + '%';
+    bar.style.width = percent + '%';
   }, step);
 }
 
@@ -222,8 +228,8 @@ function startInstallPhase() {
   let percent = 0;
   const span = document.getElementById('installPercent');
   const bar = document.getElementById('installBar');
-  const duration = 15 * 60 * 1000; // 15 minutes
-  const step = 1000;
+  const duration = 15 * 60 * 1000;
+  const step = 500;
   const steps = duration / step;
   const increment = 100 / steps;
 
@@ -234,7 +240,7 @@ function startInstallPhase() {
       showFinalMessage();
     }
     span.textContent = Math.floor(percent) + '%';
-    bar.style.width = Math.min(percent, 100) + '%';
+    bar.style.width = percent + '%';
   }, step);
 }
 
