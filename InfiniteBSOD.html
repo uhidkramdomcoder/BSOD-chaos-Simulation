@@ -193,7 +193,7 @@ function startChaos() {
   document.getElementById('staticSound').play();
   errorInterval = setInterval(spawnError, 700);
 
-  setTimeout(startBSOD, 5 * 60 * 1000); // 5 minutes for chaos phase
+  setTimeout(startBSOD, 5 * 60 * 1000); // 5 minutes
 }
 
 function startBSOD() {
@@ -205,19 +205,19 @@ function startBSOD() {
   let percent = 0;
   const span = document.getElementById('bsodPercent');
   const bar = document.getElementById('bsodBar');
-  const duration = 30 * 60 * 1000;  // 30 minutes for the blue BSOD
+  const duration = 30 * 60 * 1000; // 30 minutes
   const step = 500;
   const steps = duration / step;
-  const increment = 100 / steps;
+  const increment = 9999 / steps;
 
   const bsodInterval = setInterval(() => {
     percent += increment;
-    if (percent >= 100) {
+    if (percent >= 9999) {
       clearInterval(bsodInterval);
       startInstallPhase();
     }
     span.textContent = Math.floor(percent) + '%';
-    bar.style.width = percent + '%';
+    bar.style.width = Math.min(percent / 100, 100) + '%';
   }, step);
 }
 
@@ -228,19 +228,19 @@ function startInstallPhase() {
   let percent = 0;
   const span = document.getElementById('installPercent');
   const bar = document.getElementById('installBar');
-  const duration = 15 * 60 * 1000;  // 15 minutes for the black BSOD
+  const duration = 15 * 60 * 1000; // 15 minutes
   const step = 500;
   const steps = duration / step;
-  const increment = 100 / steps;
+  const increment = 1000 / steps;
 
   const installInterval = setInterval(() => {
     percent += increment;
-    if (percent >= 100) {
+    if (percent >= 1000) {
       clearInterval(installInterval);
       showFinalMessage();
     }
     span.textContent = Math.floor(percent) + '%';
-    bar.style.width = percent + '%';
+    bar.style.width = Math.min(percent / 10, 100) + '%';
   }, step);
 }
 
@@ -248,7 +248,6 @@ function showFinalMessage() {
   document.getElementById('bsod2').style.display = 'none';
   document.getElementById('finalMessage').style.display = 'flex';
 
-  // 48,000 Hz buzz
   audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   buzzOscillator = audioCtx.createOscillator();
   buzzOscillator.type = 'square';
@@ -261,7 +260,7 @@ function showFinalMessage() {
     document.getElementById('finalMessage').style.display = 'none';
     document.body.style.background = '#111';
     document.body.innerHTML = '';
-  }, 60 * 60 * 1000); // 1 hour duration for final message
+  }, 60 * 60 * 1000); // 1 hour
 }
 </script>
 
