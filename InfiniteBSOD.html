@@ -1,252 +1,195 @@
-<!DOCTYPE html><html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <title>System Chaos Simulator</title>
+  <meta charset="UTF-8" />
+  <title>Infinite BSOD Simulation</title>
   <style>
     html, body {
       margin: 0;
       padding: 0;
-      height: 100%;
-      width: 100%;
-      font-family: Consolas, monospace;
       background: black;
       color: white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      font-family: monospace;
       overflow: hidden;
-    }#startScreen {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-button {
-  font-size: 36px;
-  padding: 20px 40px;
-  background: red;
-  border: none;
-  border-radius: 10px;
-  color: white;
-  cursor: pointer;
-  box-shadow: 0 0 20px red;
-  transition: transform 0.2s;
-}
-
-button:hover {
-  transform: scale(1.1);
-}
-
-body.glitching {
-  animation: flash 0.1s infinite alternate;
-}
-
-@keyframes flash {
-  0% { background-color: black; }
-  100% { background-color: white; }
-}
-
-.shake {
-  animation: shake 0.1s infinite;
-}
-
-@keyframes shake {
-  0% { transform: translate(0, 0); }
-  25% { transform: translate(5px, -5px); }
-  50% { transform: translate(-5px, 5px); }
-  75% { transform: translate(5px, 5px); }
-  100% { transform: translate(-5px, -5px); }
-}
-
-.error {
-  position: absolute;
-  font-size: 24px;
-  color: red;
-  background: white;
-  border: 2px solid red;
-  padding: 10px;
-  box-shadow: 0 0 10px red;
-  font-family: monospace;
-  animation: melt 2s infinite ease-in-out;
-}
-
-@keyframes melt {
-  0% { transform: scaleY(1); opacity: 1; }
-  50% { transform: scaleY(2); opacity: 0.5; }
-  100% { transform: scaleY(1); opacity: 1; }
-}
-
-.bsod {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  display: none;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  font-size: 24px;
-  padding: 50px;
-}
-
-.bsod span {
-  font-size: 80px;
-}
-
-.blue-screen {
-  background-color: #0000AA;
-  color: white;
-}
-
-.black-screen {
-  background-color: black;
-  color: white;
-}
-
-.progress {
-  background: white;
-  width: 80%;
-  height: 20px;
-  margin-top: 30px;
-}
-
-.bar {
-  background: lightblue;
-  height: 100%;
-  width: 0%;
-  transition: width 0.5s linear;
-}
-
-.bsod img {
-  margin-top: 20px;
-  width: 300px;
-  height: 300px;
-}
-
-#finalMessage {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  background: black;
-  color: white;
-  font-size: 48px;
-  font-family: "Courier New", monospace;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
+      height: 100%;
+    }
+    #startScreen {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      background: black;
+      flex-direction: column;
+    }
+    button {
+      padding: 20px;
+      font-size: 24px;
+      background: red;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    .glitching {
+      animation: flash 0.5s infinite;
+    }
+    @keyframes flash {
+      0%, 100% { background: black; }
+      50% { background: blue; }
+    }
+    .shake {
+      animation: shake 0.3s infinite;
+    }
+    @keyframes shake {
+      0% { transform: translate(0px, 0px); }
+      25% { transform: translate(5px, -5px); }
+      50% { transform: translate(-5px, 5px); }
+      75% { transform: translate(5px, 5px); }
+      100% { transform: translate(-5px, -5px); }
+    }
+    .bsod, .finalMessage {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      width: 100%;
+      position: absolute;
+      top: 0; left: 0;
+      background: #0000AA;
+      color: white;
+      font-family: monospace;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .progressBar {
+      width: 80%;
+      background: #000;
+      border: 1px solid white;
+      margin-top: 20px;
+    }
+    .progress {
+      height: 20px;
+      background: white;
+      width: 0%;
+    }
+    .finalMessage {
+      background: black;
+      color: green;
+      font-size: 24px;
+    }
   </style>
 </head>
-<body><div id="startScreen">
-  <h1>Ready to begin?</h1>
-  <button onclick="startChaos()">START CHAOS???</button>
-</div><audio id="staticSound" loop>
-  <source src="https://www.soundjay.com/misc/sounds/static-01.mp3" type="audio/mpeg">
-</audio><div id="bsod1" class="bsod blue-screen">
-  <span>:(</span>
-  <p>Your PC ran into a problem and needs to restart.<br>
-    We're just collecting some error info, and then we'll restart for you.<br><br>
-    <span id="bsodPercent">0%</span> complete</p>
-  <div class="progress"><div class="bar" id="bsodBar"></div></div>
-  <img src="https://api.qrserver.com/v1/create-qr-code/?data=https://www.youtube.com/watch?v=dQw4w9WgXcQ&size=300x300">
-</div><div id="bsod2" class="bsod black-screen">
-  <span>:)</span>
-  <p>Your PC ran into a problem and needs to restart.<br>
-    We're just collecting some error info, and then we'll restart for you.<br><br>
-    <span id="installPercent">0%</span> complete</p>
-  <div class="progress"><div class="bar" id="installBar"></div></div>
-  <img src="https://api.qrserver.com/v1/create-qr-code/?data=https://www.youtube.com/watch?v=dQw4w9WgXcQ&size=300x300">
-</div><div id="finalMessage">YOUR COMPUTER HAS BEEN FUCKED. :)</div><script>
-let errorInterval, buzzOscillator, audioCtx;
+<body>
+  <div id="startScreen">
+    <h1>INFINITE BSOD SIMULATION</h1>
+    <button onclick="startChaos()">START CHAOS???</button>
+  </div>
 
-function spawnError() {
-  const err = document.createElement('div');
-  err.className = 'error';
-  err.textContent = 'ERORR: SYSTEM MELTDOWN';
-  err.style.left = Math.random() * (window.innerWidth - 200) + 'px';
-  err.style.top = Math.random() * (window.innerHeight - 100) + 'px';
-  document.body.appendChild(err);
-}
+  <div id="bsod1" class="bsod">
+    <h2>Blue Screen of Death</h2>
+    <p>Progress: <span id="bsodPercent">0%</span></p>
+    <div class="progressBar"><div id="bsodBar" class="progress"></div></div>
+  </div>
 
-function startChaos() {
-  document.getElementById('startScreen').remove();
-  document.body.classList.add('glitching', 'shake');
-  document.getElementById('staticSound').play();
-  errorInterval = setInterval(spawnError, 700);
+  <div id="bsod2" class="bsod" style="background:#000000;">
+    <h2>Black Screen of Doom</h2>
+    <p>Progress: <span id="installPercent">0%</span></p>
+    <div class="progressBar"><div id="installBar" class="progress"></div></div>
+  </div>
 
-  setTimeout(startBSOD, 5 * 60 * 1000); // 5 mins
-}
+  <div id="finalMessage" class="finalMessage">
+    <h1>YOUR COMPUTER HAS BEEN FUCKED :)</h1>
+  </div>
 
-function startBSOD() {
-  clearInterval(errorInterval);
-  document.body.className = '';
-  document.getElementById('staticSound').pause();
-  document.getElementById('bsod1').style.display = 'flex';
+  <audio id="staticSound" src="https://www.soundjay.com/button/beep-07.wav" loop></audio>
 
-  let percent = 0;
-  const span = document.getElementById('bsodPercent');
-  const bar = document.getElementById('bsodBar');
-  const duration = 30 * 60 * 1000; // 30 mins
-  const step = 500;
-  const steps = duration / step;
-  const increment = 100 / steps;
+  <script>
+    let errorInterval;
+    let buzzOscillator, audioCtx;
 
-  const bsodInterval = setInterval(() => {
-    percent += increment;
-    if (percent >= 100) {
-      clearInterval(bsodInterval);
-      startInstallPhase();
+    function startChaos() {
+      document.getElementById('startScreen').remove();
+      document.body.classList.add('glitching', 'shake');
+      document.getElementById('staticSound').play();
+      errorInterval = setInterval(spawnError, 700);
+      setTimeout(startBSOD, 5 * 60 * 1000); // Chaos: 5 min
     }
-    span.textContent = Math.floor(percent) + '%';
-    bar.style.width = Math.min(percent, 100) + '%';
-  }, step);
-}
 
-function startInstallPhase() {
-  document.getElementById('bsod1').style.display = 'none';
-  document.getElementById('bsod2').style.display = 'flex';
-
-  let percent = 0;
-  const span = document.getElementById('installPercent');
-  const bar = document.getElementById('installBar');
-  const duration = 15 * 60 * 1000; // 15 mins
-  const step = 500;
-  const steps = duration / step;
-  const increment = 100 / steps;
-
-  const installInterval = setInterval(() => {
-    percent += increment;
-    if (percent >= 100) {
-      clearInterval(installInterval);
-      showFinalMessage();
+    function spawnError() {
+      const msg = document.createElement('div');
+      msg.textContent = '!!! SYSTEM FAILURE !!!';
+      msg.style.position = 'absolute';
+      msg.style.left = Math.random() * window.innerWidth + 'px';
+      msg.style.top = Math.random() * window.innerHeight + 'px';
+      msg.style.color = 'red';
+      document.body.appendChild(msg);
+      setTimeout(() => msg.remove(), 2000);
     }
-    span.textContent = Math.floor(percent) + '%';
-    bar.style.width = Math.min(percent, 100) + '%';
-  }, step);
-}
 
-function showFinalMessage() {
-  document.getElementById('bsod2').style.display = 'none';
-  document.getElementById('finalMessage').style.display = 'flex';
+    function startBSOD() {
+      clearInterval(errorInterval);
+      document.body.className = '';
+      document.getElementById('staticSound').pause();
+      document.getElementById('bsod1').style.display = 'flex';
 
-  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  buzzOscillator = audioCtx.createOscillator();
-  buzzOscillator.type = 'square';
-  buzzOscillator.frequency.setValueAtTime(48000, audioCtx.currentTime);
-  buzzOscillator.connect(audioCtx.destination);
-  buzzOscillator.start();
+      let percent = 0;
+      const span = document.getElementById('bsodPercent');
+      const bar = document.getElementById('bsodBar');
+      const duration = 30 * 60 * 1000; // 30 min
+      const step = 1000;
+      const increment = 100 / (duration / step);
 
-  setTimeout(() => {
-    buzzOscillator.stop();
-    document.getElementById('finalMessage').style.display = 'none';
-    document.body.style.background = '#111';
-    document.body.innerHTML = '';
-  }, 60 * 60 * 1000); // 1 hour
-}
-</script></body>
+      const bsodInterval = setInterval(() => {
+        percent += increment;
+        if (percent >= 100) {
+          clearInterval(bsodInterval);
+          startInstallPhase();
+        }
+        span.textContent = Math.floor(percent) + '%';
+        bar.style.width = percent + '%';
+      }, step);
+    }
+
+    function startInstallPhase() {
+      document.getElementById('bsod1').style.display = 'none';
+      document.getElementById('bsod2').style.display = 'flex';
+
+      let percent = 0;
+      const span = document.getElementById('installPercent');
+      const bar = document.getElementById('installBar');
+      const duration = 15 * 60 * 1000; // 15 min
+      const step = 1000;
+      const increment = 100 / (duration / step);
+
+      const installInterval = setInterval(() => {
+        percent += increment;
+        if (percent >= 100) {
+          clearInterval(installInterval);
+          showFinalMessage();
+        }
+        span.textContent = Math.floor(percent) + '%';
+        bar.style.width = percent + '%';
+      }, step);
+    }
+
+    function showFinalMessage() {
+      document.getElementById('bsod2').style.display = 'none';
+      document.getElementById('finalMessage').style.display = 'flex';
+
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      buzzOscillator = audioCtx.createOscillator();
+      buzzOscillator.type = 'square';
+      buzzOscillator.frequency.setValueAtTime(48000, audioCtx.currentTime);
+      buzzOscillator.connect(audioCtx.destination);
+      buzzOscillator.start();
+
+      setTimeout(() => {
+        buzzOscillator.stop();
+        document.getElementById('finalMessage').style.display = 'none';
+        document.body.style.background = '#111';
+        document.body.innerHTML = '';
+      }, 60 * 60 * 1000); // 1 hour
+    }
+  </script>
+</body>
 </html>
