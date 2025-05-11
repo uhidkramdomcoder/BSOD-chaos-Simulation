@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE html><html>
 <head>
   <title>System Chaos Simulator</title>
   <style>
@@ -15,167 +14,154 @@
       justify-content: center;
       align-items: center;
       overflow: hidden;
-    }
+    }#startScreen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-    #startScreen {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
+button {
+  font-size: 36px;
+  padding: 20px 40px;
+  background: red;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 0 20px red;
+  transition: transform 0.2s;
+}
 
-    button {
-      font-size: 36px;
-      padding: 20px 40px;
-      background: red;
-      border: none;
-      border-radius: 10px;
-      color: white;
-      cursor: pointer;
-      box-shadow: 0 0 20px red;
-      transition: transform 0.2s;
-    }
+button:hover {
+  transform: scale(1.1);
+}
 
-    button:hover {
-      transform: scale(1.1);
-    }
+body.glitching {
+  animation: flash 0.1s infinite alternate;
+}
 
-    body.glitching {
-      animation: flash 0.1s infinite alternate;
-    }
+@keyframes flash {
+  0% { background-color: black; }
+  100% { background-color: white; }
+}
 
-    @keyframes flash {
-      0% { background-color: black; }
-      100% { background-color: white; }
-    }
+.shake {
+  animation: shake 0.1s infinite;
+}
 
-    .shake {
-      animation: shake 0.1s infinite;
-    }
+@keyframes shake {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(5px, -5px); }
+  50% { transform: translate(-5px, 5px); }
+  75% { transform: translate(5px, 5px); }
+  100% { transform: translate(-5px, -5px); }
+}
 
-    @keyframes shake {
-      0% { transform: translate(0, 0); }
-      25% { transform: translate(5px, -5px); }
-      50% { transform: translate(-5px, 5px); }
-      75% { transform: translate(5px, 5px); }
-      100% { transform: translate(-5px, -5px); }
-    }
+.error {
+  position: absolute;
+  font-size: 24px;
+  color: red;
+  background: white;
+  border: 2px solid red;
+  padding: 10px;
+  box-shadow: 0 0 10px red;
+  font-family: monospace;
+  animation: melt 2s infinite ease-in-out;
+}
 
-    .error {
-      position: absolute;
-      font-size: 24px;
-      color: red;
-      background: white;
-      border: 2px solid red;
-      padding: 10px;
-      box-shadow: 0 0 10px red;
-      font-family: monospace;
-      animation: melt 2s infinite ease-in-out;
-    }
+@keyframes melt {
+  0% { transform: scaleY(1); opacity: 1; }
+  50% { transform: scaleY(2); opacity: 0.5; }
+  100% { transform: scaleY(1); opacity: 1; }
+}
 
-    @keyframes melt {
-      0% { transform: scaleY(1); opacity: 1; }
-      50% { transform: scaleY(2); opacity: 0.5; }
-      100% { transform: scaleY(1); opacity: 1; }
-    }
+.bsod {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  padding: 50px;
+}
 
-    .bsod {
-      position: fixed;
-      top: 0;
-      left: 0;
-      height: 100%;
-      width: 100%;
-      display: none;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      font-size: 24px;
-      padding: 50px;
-    }
+.bsod span {
+  font-size: 80px;
+}
 
-    .bsod span {
-      font-size: 80px;
-    }
+.blue-screen {
+  background-color: #0000AA;
+  color: white;
+}
 
-    .blue-screen {
-      background-color: #0000AA;
-      color: white;
-    }
+.black-screen {
+  background-color: black;
+  color: white;
+}
 
-    .black-screen {
-      background-color: black;
-      color: white;
-    }
+.progress {
+  background: white;
+  width: 80%;
+  height: 20px;
+  margin-top: 30px;
+}
 
-    .progress {
-      background: white;
-      width: 80%;
-      height: 20px;
-      margin-top: 30px;
-    }
+.bar {
+  background: lightblue;
+  height: 100%;
+  width: 0%;
+  transition: width 0.5s linear;
+}
 
-    .bar {
-      background: lightblue;
-      height: 100%;
-      width: 0%;
-      transition: width 0.5s linear;
-    }
+.bsod img {
+  margin-top: 20px;
+  width: 300px;
+  height: 300px;
+}
 
-    .bsod img {
-      margin-top: 20px;
-      width: 300px;
-      height: 300px;
-    }
+#finalMessage {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: black;
+  color: white;
+  font-size: 48px;
+  font-family: "Courier New", monospace;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
 
-    #finalMessage {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      height: 100%;
-      width: 100%;
-      background: black;
-      color: white;
-      font-size: 48px;
-      font-family: "Courier New", monospace;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-    }
   </style>
 </head>
-<body>
-
-<div id="startScreen">
+<body><div id="startScreen">
   <h1>Ready to begin?</h1>
   <button onclick="startChaos()">START CHAOS???</button>
-</div>
-
-<audio id="staticSound" loop>
+</div><audio id="staticSound" loop>
   <source src="https://www.soundjay.com/misc/sounds/static-01.mp3" type="audio/mpeg">
-</audio>
-
-<div id="bsod1" class="bsod blue-screen">
+</audio><div id="bsod1" class="bsod blue-screen">
   <span>:(</span>
   <p>Your PC ran into a problem and needs to restart.<br>
     We're just collecting some error info, and then we'll restart for you.<br><br>
     <span id="bsodPercent">0%</span> complete</p>
   <div class="progress"><div class="bar" id="bsodBar"></div></div>
   <img src="https://api.qrserver.com/v1/create-qr-code/?data=https://www.youtube.com/watch?v=dQw4w9WgXcQ&size=300x300">
-</div>
-
-<div id="bsod2" class="bsod black-screen">
+</div><div id="bsod2" class="bsod black-screen">
   <span>:)</span>
   <p>Your PC ran into a problem and needs to restart.<br>
     We're just collecting some error info, and then we'll restart for you.<br><br>
     <span id="installPercent">0%</span> complete</p>
   <div class="progress"><div class="bar" id="installBar"></div></div>
   <img src="https://api.qrserver.com/v1/create-qr-code/?data=https://www.youtube.com/watch?v=dQw4w9WgXcQ&size=300x300">
-</div>
-
-<div id="finalMessage">YOUR COMPUTER HAS BEEN FUCKED. :)</div>
-
-<script>
+</div><div id="finalMessage">YOUR COMPUTER HAS BEEN FUCKED. :)</div><script>
 let errorInterval, buzzOscillator, audioCtx;
 
 function spawnError() {
@@ -193,7 +179,7 @@ function startChaos() {
   document.getElementById('staticSound').play();
   errorInterval = setInterval(spawnError, 700);
 
-  setTimeout(startBSOD, 5 * 60 * 1000); // 5 minutes
+  setTimeout(startBSOD, 5 * 60 * 1000); // 5 mins
 }
 
 function startBSOD() {
@@ -205,19 +191,19 @@ function startBSOD() {
   let percent = 0;
   const span = document.getElementById('bsodPercent');
   const bar = document.getElementById('bsodBar');
-  const duration = 30 * 60 * 1000; // 30 minutes
+  const duration = 30 * 60 * 1000; // 30 mins
   const step = 500;
   const steps = duration / step;
-  const increment = 9999 / steps;
+  const increment = 100 / steps;
 
   const bsodInterval = setInterval(() => {
     percent += increment;
-    if (percent >= 9999) {
+    if (percent >= 100) {
       clearInterval(bsodInterval);
       startInstallPhase();
     }
     span.textContent = Math.floor(percent) + '%';
-    bar.style.width = Math.min(percent / 100, 100) + '%';
+    bar.style.width = Math.min(percent, 100) + '%';
   }, step);
 }
 
@@ -228,19 +214,19 @@ function startInstallPhase() {
   let percent = 0;
   const span = document.getElementById('installPercent');
   const bar = document.getElementById('installBar');
-  const duration = 15 * 60 * 1000; // 15 minutes
+  const duration = 15 * 60 * 1000; // 15 mins
   const step = 500;
   const steps = duration / step;
-  const increment = 1000 / steps;
+  const increment = 100 / steps;
 
   const installInterval = setInterval(() => {
     percent += increment;
-    if (percent >= 1000) {
+    if (percent >= 100) {
       clearInterval(installInterval);
       showFinalMessage();
     }
     span.textContent = Math.floor(percent) + '%';
-    bar.style.width = Math.min(percent / 10, 100) + '%';
+    bar.style.width = Math.min(percent, 100) + '%';
   }, step);
 }
 
@@ -262,7 +248,5 @@ function showFinalMessage() {
     document.body.innerHTML = '';
   }, 60 * 60 * 1000); // 1 hour
 }
-</script>
-
-</body>
+</script></body>
 </html>
