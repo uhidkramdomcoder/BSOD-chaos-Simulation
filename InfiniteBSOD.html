@@ -33,11 +33,24 @@
       cursor: pointer;
       box-shadow: 0 0 20px red;
       transition: transform 0.2s;
-      margin: 10px;
     }
 
     button:hover {
       transform: scale(1.1);
+    }
+
+    .exit-button {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: red;
+      color: white;
+      padding: 10px;
+      font-size: 18px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      z-index: 999;
     }
 
     body.glitching {
@@ -142,7 +155,6 @@
       justify-content: center;
       align-items: center;
       text-align: center;
-      flex-direction: column;
     }
   </style>
 </head>
@@ -151,8 +163,9 @@
 <div id="startScreen">
   <h1>Ready to begin?</h1>
   <button onclick="startChaos()">START CHAOS???</button>
-  <button onclick="exitChaos()">EXIT</button>
 </div>
+
+<button class="exit-button" onclick="exitChaos()">EXIT</button>
 
 <audio id="staticSound" loop>
   <source src="https://www.soundjay.com/misc/sounds/static-01.mp3" type="audio/mpeg">
@@ -176,11 +189,7 @@
   <img src="https://api.qrserver.com/v1/create-qr-code/?data=https://www.youtube.com/watch?v=dQw4w9WgXcQ&size=300x300">
 </div>
 
-<div id="finalMessage">
-  YOUR COMPUTER HAS BEEN FUCKED. :)
-  <br><br>
-  <button onclick="exitChaos()">EXIT</button>
-</div>
+<div id="finalMessage">YOUR COMPUTER HAS BEEN FUCKED. :)</div>
 
 <script>
 let errorInterval, buzzOscillator, audioCtx;
@@ -199,7 +208,8 @@ function startChaos() {
   document.body.classList.add('glitching', 'shake');
   document.getElementById('staticSound').play();
   errorInterval = setInterval(spawnError, 700);
-  setTimeout(startBSOD, 5 * 60 * 1000);
+
+  setTimeout(startBSOD, 5 * 60 * 1000); // 5 mins
 }
 
 function startBSOD() {
@@ -254,6 +264,7 @@ function showFinalMessage() {
   document.getElementById('bsod2').style.display = 'none';
   document.getElementById('finalMessage').style.display = 'flex';
 
+  // 48,000 Hz buzz
   audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   buzzOscillator = audioCtx.createOscillator();
   buzzOscillator.type = 'square';
@@ -262,21 +273,23 @@ function showFinalMessage() {
   buzzOscillator.start();
 
   setTimeout(() => {
-    exitChaos();
+    buzzOscillator.stop();
+    document.getElementById('finalMessage').style.display = 'none';
+    document.body.style.background = '#111';
+    document.body.innerHTML = '';
   }, 60 * 60 * 1000); // 1 hour
 }
 
 function exitChaos() {
-  if (buzzOscillator) buzzOscillator.stop();
-  if (audioCtx) audioCtx.close();
-  window.location.reload(); // Refreshes the page
+  clearInterval(errorInterval);
+  document.body.className = '';
+  document.getElementById('staticSound').pause();
+  document.getElementById('bsod1').style.display = 'none';
+  document.getElementById('bsod2').style.display = 'none';
+  document.getElementById('finalMessage').style.display = 'none';
+  document.body.style.background = '#111';
+  document.body.innerHTML = '';
 }
-
-document.addEventListener('keydown', (event) => {
-  if (event.key === 'Escape') {
-    exitChaos();
-  }
-});
 </script>
 
 </body>
