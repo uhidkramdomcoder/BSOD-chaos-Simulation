@@ -10,18 +10,6 @@
       width: 100%;
       font-family: Consolas, monospace;
       background: black;
-      <!DOCTYPE html>
-<html>
-<head>
-  <title>System Chaos Simulator</title>
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      width: 100%;
-      font-family: Consolas, monospace;
-      background: black;
       color: white;
       display: flex;
       justify-content: center;
@@ -220,16 +208,16 @@ function startBSOD() {
   const duration = 30 * 60 * 1000;  // 30 minutes for the blue BSOD
   const step = 500;
   const steps = duration / step;
-  const increment = 9999 / steps;
+  const increment = 100 / steps;
 
   const bsodInterval = setInterval(() => {
     percent += increment;
-    if (percent >= 9999) {
+    if (percent >= 100) {
       clearInterval(bsodInterval);
       startInstallPhase();
     }
     span.textContent = Math.floor(percent) + '%';
-    bar.style.width = Math.min(percent / 100, 100) + '%';
+    bar.style.width = percent + '%';
   }, step);
 }
 
@@ -243,16 +231,16 @@ function startInstallPhase() {
   const duration = 15 * 60 * 1000;  // 15 minutes for the black BSOD
   const step = 500;
   const steps = duration / step;
-  const increment = 1000 / steps;
+  const increment = 100 / steps;
 
   const installInterval = setInterval(() => {
     percent += increment;
-    if (percent >= 1000) {
+    if (percent >= 100) {
       clearInterval(installInterval);
       showFinalMessage();
     }
     span.textContent = Math.floor(percent) + '%';
-    bar.style.width = Math.min(percent / 10, 100) + '%';
+    bar.style.width = percent + '%';
   }, step);
 }
 
