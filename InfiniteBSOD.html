@@ -40,7 +40,7 @@
     }
 
     body.glitching {
-      animation: flash 5s infinite alternate;
+      animation: flash 1s infinite alternate;
     }
 
     @keyframes flash {
@@ -49,7 +49,7 @@
     }
 
     .shake {
-      animation: shake 5s infinite;
+      animation: shake 0.5s infinite;
     }
 
     @keyframes shake {
@@ -90,6 +90,7 @@
       align-items: center;
       font-size: 24px;
       padding: 50px;
+      text-align: center;
     }
 
     .bsod span {
@@ -176,12 +177,12 @@
 <div id="finalMessage">YOUR COMPUTER HAS BEEN FUCKED. :)</div>
 
 <script>
-let errorInterval, buzzOscillator, audioCtx;
+let errorInterval, audioCtx, buzzOscillator;
 
 function spawnError() {
   const err = document.createElement('div');
   err.className = 'error';
-  err.textContent = 'ERORR: SYSTEM MELTDOWN';
+  err.textContent = 'ERROR: SYSTEM MELTDOWN';
   err.style.left = Math.random() * (window.innerWidth - 200) + 'px';
   err.style.top = Math.random() * (window.innerHeight - 100) + 'px';
   document.body.appendChild(err);
@@ -205,19 +206,19 @@ function startBSOD() {
   let percent = 0;
   const span = document.getElementById('bsodPercent');
   const bar = document.getElementById('bsodBar');
-  const duration = 30 * 60 * 1000;  // 30 minutes
-  const step = 500;
+  const duration = 30 * 60 * 1000; // 30 minutes
+  const step = 1000;
   const steps = duration / step;
-  const increment = 9999 / steps;
+  const increment = 100 / steps;
 
   const bsodInterval = setInterval(() => {
     percent += increment;
-    if (percent >= 9999) {
+    if (percent >= 100) {
       clearInterval(bsodInterval);
       startInstallPhase();
     }
     span.textContent = Math.floor(percent) + '%';
-    bar.style.width = Math.min(percent / 100, 100) + '%';
+    bar.style.width = Math.min(percent, 100) + '%';
   }, step);
 }
 
@@ -228,19 +229,19 @@ function startInstallPhase() {
   let percent = 0;
   const span = document.getElementById('installPercent');
   const bar = document.getElementById('installBar');
-  const duration = 15 * 60 * 1000;  // 15 minutes
-  const step = 500;
+  const duration = 15 * 60 * 1000; // 15 minutes
+  const step = 1000;
   const steps = duration / step;
-  const increment = 1000 / steps;
+  const increment = 100 / steps;
 
   const installInterval = setInterval(() => {
     percent += increment;
-    if (percent >= 1000) {
+    if (percent >= 100) {
       clearInterval(installInterval);
       showFinalMessage();
     }
     span.textContent = Math.floor(percent) + '%';
-    bar.style.width = Math.min(percent / 10, 100) + '%';
+    bar.style.width = Math.min(percent, 100) + '%';
   }, step);
 }
 
@@ -248,7 +249,6 @@ function showFinalMessage() {
   document.getElementById('bsod2').style.display = 'none';
   document.getElementById('finalMessage').style.display = 'flex';
 
-  // 48,000 Hz buzz
   audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   buzzOscillator = audioCtx.createOscillator();
   buzzOscillator.type = 'square';
@@ -259,7 +259,6 @@ function showFinalMessage() {
   setTimeout(() => {
     buzzOscillator.stop();
     document.getElementById('finalMessage').style.display = 'none';
-    document.body.style.background = '#111';
     document.body.innerHTML = '';
   }, 60 * 60 * 1000); // 1 hour
 }
